@@ -27,7 +27,7 @@
 **이동이 불가능한 영역(건물, 산림, 수역 등)** 을 분리하는 핵심 단계이다.
 
 객체 탐지(Object Detection) 또는 세그멘테이션(Segmentation)은  
-입력 영상 $ I(x, y) $를 각 클래스 $ C_k $로 분류하는 함수 $ f_\theta $를 학습한다.
+입력 영상 $I(x, y)$ 를 각 클래스 $C_k$ 로 분류하는 함수 $f_\theta$ 를 학습한다.
 
 $$
 f_\theta: \mathbb{R}^{H \times W \times 3} \rightarrow \{C_1, C_2, ..., C_K\}^{H \times W}
@@ -258,8 +258,8 @@ $$
 
 - weight가 없는 상황이였으면 직선거리고 탐색을 하였을 상황인데, 해당 shp에 맞게 도로를 중심으로 경로를 탐색함을 확인할 수 있다.
 
-![alt text](image-4.png)
-![alt text](image-5.png)
+![alt text](img/Result_View1.png)
+![alt text](img/Result_View2.png)
 
 ### V. 결론
 
