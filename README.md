@@ -33,15 +33,15 @@ $$
 f_\theta: \mathbb{R}^{H \times W \times 3} \rightarrow \{C_1, C_2, ..., C_K\}^{H \times W}
 $$
 
-여기서 $ C_k \in \{\text{도로}, \text{건물}, \text{하천}, \text{산림}, ...\} $이다.  
+여기서 $C_k \in \{\text{도로}, \text{건물}, \text{하천}, \text{산림}, ...\}$ 이다.  
 학습은 주로 교차 엔트로피 손실로 진행된다.
 
 $$
 \mathcal{L}_{seg} = - \sum_{x,y} \sum_{k=1}^{K} p_{k}(x,y) \log q_{k}(x,y)
 $$
 
-- $ p_k(x,y) $: 정답(one-hot) 분포  
-- $ q_k(x,y) = f_\theta(I(x,y)) $: 모델의 예측 확률  
+- $p_k(x,y)$: 정답(one-hot) 분포  
+- $q_k(x,y) = f_\theta(I(x,y))$: 모델의 예측 확률  
 
 이 결과를 통해 픽셀 단위의 라벨맵(Label Map)이 만들어지고,  
 이를 **벡터화(Polygonization)** 하여 Shapefile(SHP)로 변환한다.  
@@ -61,10 +61,10 @@ $$
 I_{HR} = G_\phi(I_{LR}) \quad \text{with} \quad \min_\phi \; \mathcal{L}(I_{HR}, \hat{I}_{HR})
 $$
 
-- $ I_{LR} $: 저해상도 입력 영상  
-- $ I_{HR} $: 고해상도 목표 영상  
-- $ G_\phi $: 복원 네트워크 (예: EDSR, ESRGAN 등)  
-- $ \mathcal{L} $: 복원 손실 (MSE, Perceptual Loss 등)
+- $I_{LR}$: 저해상도 입력 영상  
+- $I_{HR}$: 고해상도 목표 영상  
+- $G_\phi$: 복원 네트워크 (예: EDSR, ESRGAN 등)  
+- $\mathcal{L}$: 복원 손실 (MSE, Perceptual Loss 등)
 
 대표적으로 **ESRGAN** 은 다음과 같은 Perceptual + Adversarial 손실을 사용한다:
 
@@ -79,9 +79,9 @@ $$
 
 ### 3. DCT (Discrete Cosine Transform)
 
-DEM(Digital Elevation Model)은 일정 격자 간격으로 고도를 샘플링한 행렬 $ Z[i,j] $ 이다.  
+DEM(Digital Elevation Model)은 일정 격자 간격으로 고도를 샘플링한 행렬 $Z[i,j]$ 이다.  
 그러나 격자 간격이 90m 수준이면, 표면이 계단형으로 나타나 **비연속적인 고도 변화** 가 발생한다.  
-이를 연속 함수 $ f(x, y) $로 근사하기 위해 **이산 코사인 변환(DCT)** 을 사용한다.
+이를 연속 함수 $f(x, y)$ 로 근사하기 위해 **이산 코사인 변환(DCT)** 을 사용한다.
 
 DCT-II 변환식은 다음과 같다:
 
@@ -111,9 +111,9 @@ $$
 \end{cases}
 $$
 
-DCT 계수 $ F(u,v) $ 중 저주파 영역(작은 u,v)만 남기고 고주파를 제거하면  
+DCT 계수 $F(u,v)$ 중 저주파 영역(작은 u,v)만 남기고 고주파를 제거하면  
 **지형의 완만한 변화는 유지하면서 잡음(Noise)과 계단 효과를 억제** 할 수 있다.  
-즉, $ f(x,y) $는 DEM의 **연속적이고 부드러운 근사 함수** 로 동작한다.
+즉, $f(x,y)$ 는 DEM의 **연속적이고 부드러운 근사 함수** 로 동작한다.
 
 ---
 
@@ -126,8 +126,8 @@ $$
 f(n) = g(n) + h(n)
 $$
 
-- $ g(n) $: 시작점에서 현재 노드까지의 실제 누적 비용  
-- $ h(n) $: 목표점까지의 추정 비용 (Heuristic)
+- $g(n)$ : 시작점에서 현재 노드까지의 실제 누적 비용  
+- $h(n)$ : 목표점까지의 추정 비용 (Heuristic)
 
 8방향 격자에서 휴리스틱으로는 **유클리드 거리** 또는 **옥타일 거리**를 사용한다.
 
@@ -141,10 +141,10 @@ $$
 h(n) = D \cdot (dx + dy) + (D_2 - 2D) \cdot \min(dx, dy)
 $$
 
-- $ D, D_2 $: 이동 단가 (보통 D=1, D₂=√2)  
-- $ dx = |x_{goal} - x_n|, \; dy = |y_{goal} - y_n| $
+- $D, D_2$ : 이동 단가 (보통 D=1, D₂=√2)  
+- $dx = |x_{goal} - x_n|, \; dy = |y_{goal} - y_n|$
 
-가중치(Weight) 지도를 $ W(x,y) $라 하면,  
+가중치(Weight) 지도를 $W(x,y)$ 라 하면,  
 각 간선의 이동 비용은 고도차와 가중치를 함께 고려해 다음과 같이 정의된다:
 
 $$
@@ -152,8 +152,8 @@ c(n,m) = W(x_m, y_m) \cdot \sqrt{(x_m-x_n)^2 + (y_m-y_n)^2} \cdot (1 + \lambda |
 $$
 
 여기서
-- $ |\nabla f| $: 고도 변화율 (경사도 기반 페널티)
-- $ \lambda $: 경사 민감도 조절 계수  
+- $|\nabla f|$ : 고도 변화율 (경사도 기반 페널티)
+- $\lambda$ : 경사 민감도 조절 계수  
 
 결과적으로, A*는 단순히 **가장 짧은 거리** 가 아니라  
 “**가장 이동이 용이하고, 실제 지형을 반영한 경로**”를 찾게 된다.
@@ -235,7 +235,7 @@ $$
 
 | 항목 | 값 | 의미 |
 |------|------|------|
-| shape | (180, 204) | Shape($ A_{kl} $) |
+| shape | (180, 204) | Shape( $A_{kl}$ ) |
 | $W_m$ | 20,538.49 | 전체 X축 길이 (m) |
 | $H_m$ | 23,292.26 | 전체 Y축 길이 (m) |
 | $Kc$, $Lc$ | (81, 91) | DCT 계수 한계 인덱스 |
